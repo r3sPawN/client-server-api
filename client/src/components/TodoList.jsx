@@ -31,17 +31,19 @@ export class TodoList extends React.Component {
     this.setState({ tasks: otherTasks });
   };
 
-  handleAddTask = () => {
+  handleAddTask = (id) => {
     const { tasks } = this.state;
-    const taskCount = tasks.length;
-    tasks.push({ id: taskCount + 1, name: "", editable: true });
-    this.setState({ tasks: tasks });
+    tasks.push({ name: "Empty task" });
+    let lastItem = [...tasks].pop();
+    this.setState({ tasks: tasks.sort({ date: 1 }) });
+    axios.post("http://localhost:5000/api/tasks/", lastItem);
   };
 
   handleDelete = (id) => {
     const { tasks } = this.state;
-    const newList = tasks.filter((element) => element.id !== id);
+    const newList = tasks.filter((element) => element._id !== id);
     this.setState({ tasks: newList });
+    axios.delete(`http://localhost:5000/api/tasks/${id}`);
   };
 
   handleOnChange = (event, id) => {
@@ -65,11 +67,14 @@ export class TodoList extends React.Component {
               disabled={!props.editable}
               onChange={(event) => this.handleOnChange(event, props.id)}
             ></input>
-            <span onClick={() => this.handleDelete(props.id)}>delete</span>
+            <span onClick={() => this.handleDelete(props._id)}>delete</span>
             <span onClick={() => this.handleEdit(props.id)}>edit</span>
           </div>
         ))}
-        <span className="add-button" onClick={this.handleAddTask}>
+        <span
+          className="add-button"
+          onClick={() => this.handleAddTask(this.props._id)}
+        >
           Add new
         </span>
       </div>
