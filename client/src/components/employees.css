@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.employee-container {
+  flex: 1 0 20%;
+  margin: 20px;
+  border: 1px solid black;
+  padding: 5px;
+}
